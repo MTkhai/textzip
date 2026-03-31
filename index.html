@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,50 +8,52 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         [x-cloak] { display: none !important; }
-        .cyber-card { background: rgba(15, 23, 42, 0.9); border: 1px solid #1e293b; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        .input-ghost { background: #020617; border: 1px solid #1e293b; color: #cbd5e1; transition: all 0.3s; }
-        .input-ghost:focus { border-color: #06b6d4; box-shadow: 0 0 10px rgba(6, 182, 212, 0.2); outline: none; }
+        body { background: #020617; font-family: 'Consolas', 'Monaco', monospace; }
+        .cyber-panel { background: rgba(15, 23, 42, 0.95); border: 1px solid #1e293b; }
+        .cyber-input { background: #000; border: 1px solid #334155; color: #f1f5f9; }
+        .cyber-input:focus { border-color: #06b6d4; outline: none; box-shadow: 0 0 10px rgba(6, 182, 212, 0.1); }
     </style>
 </head>
-<body class="bg-[#020617] text-slate-300 min-h-screen font-mono" x-data="appData()" x-cloak>
-    
-    <div class="max-w-6xl mx-auto p-4 md:p-10">
-        <header class="mb-10 flex flex-col md:flex-row justify-between items-end border-b border-slate-800 pb-6 gap-6">
+<body class="text-slate-400 p-4 md:p-8" x-data="stealthEngine()" x-cloak>
+
+    <div class="max-w-6xl mx-auto">
+        <header class="flex flex-col md:flex-row justify-between items-center mb-8 pb-6 border-b border-slate-800 gap-4">
             <div>
-                <h1 class="text-3xl font-black text-white italic tracking-tighter">ZWC Datahider v4.0</h1>
-                <p class="text-[10px] text-cyan-500 uppercase tracking-[0.3em] mt-2">ZWC Datahider Lite</p>
+                <h1 class="text-2xl font-black text-white italic tracking-tighter">ZWC Datahider v5.0</h1>
+                <p class="text-[10px] text-cyan-500 uppercase tracking-widest">ZWC Datahider Lite</p>
             </div>
             <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800">
-                <button @click="tab = 'hide'" :class="tab === 'hide' ? 'bg-cyan-600 text-white shadow-lg' : 'text-slate-500'" class="px-8 py-2.5 rounded-lg text-xs font-bold transition-all">SEALTH</button>
-                <button @click="tab = 'reveal'" :class="tab === 'reveal' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500'" class="px-8 py-2.5 rounded-lg text-xs font-bold transition-all">REVEAL</button>
+                <button @click="tab = 'encode'" :class="tab === 'encode' ? 'bg-cyan-600 text-white shadow-lg' : 'text-slate-500'" class="px-8 py-2 rounded-lg text-xs font-bold transition-all">ENCODE</button>
+                <button @click="tab = 'decode'" :class="tab === 'decode' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500'" class="px-8 py-2 rounded-lg text-xs font-bold transition-all">DECODE</button>
             </div>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div class="lg:col-span-7">
-                <div class="cyber-card p-8 rounded-3xl space-y-8">
+                <div class="cyber-panel p-6 rounded-3xl space-y-6">
                     
-                    <template x-if="tab === 'hide'">
+                    <template x-if="tab === 'encode'">
                         <div class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-black/40 rounded-2xl border border-slate-800">
-                                <div class="space-y-3">
-                                    <label class="text-[10px] font-bold text-cyan-500 uppercase">Bit Sealth Mode</label>
-                                    <select x-model="mode" class="w-full bg-slate-950 text-xs border border-slate-700 p-2 rounded-lg text-white outline-none">
-                                        <option value="16bit">16-BIT</option>
-                                        <option value="8bit">8-BIT</option>
-                                        <option value="2bit">2-BIT</option>
+                            <div class="grid grid-cols-2 gap-4 p-4 bg-slate-950 rounded-2xl border border-slate-800">
+                                <div>
+                                    <label class="text-[10px] font-bold text-cyan-500 uppercase block mb-2">Bit Stealth Mode</label>
+                                    <select x-model="mode" class="w-full bg-black border border-slate-800 p-2 rounded text-xs text-white outline-none">
+                                        <option value="32">32-Bit(Hybrid)</option>
+                                        <option value="16">16-Bit</option>
+                                        <option value="8">8-Bit</option>
+                                        <option value="2">2-Bit</option>
                                     </select>
                                 </div>
-                                <div class="space-y-3">
-                                    <label class="text-[10px] font-bold text-cyan-500 uppercase">Shape stealth Options</label>
+                                <div>
+                                    <label class="text-[10px] font-bold text-cyan-500 uppercase block mb-2">Shape stealth Options</label>
                                     <div class="flex gap-4 pt-1">
-                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                        <label class="flex items-center gap-2 cursor-pointer">
                                             <input type="checkbox" x-model="mimic.space" class="accent-cyan-500">
-                                            <span class="text-[10px] group-hover:text-cyan-400">SPACE MIMIC</span>
+                                            <span class="text-[10px]">SPACE</span>
                                         </label>
-                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                        <label class="flex items-center gap-2 cursor-pointer">
                                             <input type="checkbox" x-model="mimic.punc" class="accent-cyan-500">
-                                            <span class="text-[10px] group-hover:text-cyan-400">PUNC MIMIC</span>
+                                            <span class="text-[10px]">PUNC/HOMO</span>
                                         </label>
                                     </div>
                                 </div>
@@ -59,49 +61,44 @@
 
                             <div class="space-y-2">
                                 <label class="text-[10px] text-slate-500 uppercase tracking-widest">Secret Message</label>
-                                <textarea x-model="hide.secret" class="w-full input-ghost rounded-2xl p-4 text-sm h-28" placeholder="Please enter the secret message..."></textarea>
+                                <textarea x-model="encode.secret" class="w-full cyber-input rounded-2xl p-4 text-sm h-28" placeholder="Message to hide..."></textarea>
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] text-slate-500 uppercase tracking-widest">Cover Text</label>
-                                <textarea x-model="hide.cover" class="w-full input-ghost rounded-2xl p-4 text-sm h-28" placeholder="Please, enter the cover text..."></textarea>
+                                <textarea x-model="encode.cover" class="w-full cyber-input rounded-2xl p-4 text-sm h-28" placeholder="Punctuation-rich text..."></textarea>
                             </div>
-                            <button @click="submitHide()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black py-5 rounded-2xl transition-all shadow-xl shadow-cyan-900/10 active:scale-95">DEPLOY SEALTH</button>
+                            <button @click="processEncode()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black py-5 rounded-2xl transition-all shadow-xl shadow-cyan-900/10 active:scale-95">DEPLOY SEALTH</button>
                         </div>
                     </template>
 
-                    <template x-if="tab === 'reveal'">
+                    <template x-if="tab === 'decode'">
                         <div class="space-y-6">
-                            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-                                <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-[0.2em]">Scanner_Interface</span>
-                                <div class="flex items-center gap-2">
-                                    <div class="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></div>
-                                    <span class="text-[9px] text-slate-500">READY TO SCAN</span>
-                                </div>
-                            </div>
-                            <textarea x-model="reveal.input" class="w-full input-ghost rounded-2xl p-4 text-sm h-72" placeholder="Paste the suspicious text here..."></textarea>
-                            <button @click="submitReveal()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-indigo-900/20 active:scale-95">AUTO-DETECT</button>
+                            <label class="text-[10px] font-bold text-indigo-400 uppercase block border-b border-slate-800 pb-2">Scanner Input</label>
+                            <textarea x-model="decode.input" class="w-full cyber-input rounded-2xl p-4 text-sm h-72" placeholder="Paste suspected text here..."></textarea>
+                            <button @click="processDecode()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-5 rounded-2xl transition-all shadow-xl active:scale-95">AUTO-SCAN PAYLOAD</button>
                         </div>
                     </template>
-
                 </div>
             </div>
 
-            <div class="lg:col-span-5 flex flex-col gap-6">
-                <div class="bg-black/80 border border-slate-800 rounded-3xl flex-grow overflow-hidden flex flex-col shadow-2xl">
-                    <div class="p-5 border-b border-slate-900 flex justify-between items-center bg-slate-900/20">
-                        <span class="text-[10px] font-bold text-slate-500 uppercase">Matrix_Console</span>
-                        <button @click="clear()" class="text-[9px] text-red-500 hover:underline">SYS_RESET</button>
+            <div class="lg:col-span-5">
+                <div class="bg-black/60 border border-slate-800 rounded-3xl h-full flex flex-col overflow-hidden shadow-2xl">
+                    <div class="p-4 bg-slate-900/30 border-b border-slate-900 flex justify-between items-center">
+                        <span class="text-[10px] font-bold text-slate-500">SYSTEM_TERMINAL</span>
+                        <button @click="reset()" class="text-[9px] text-red-500 hover:underline font-bold">SYS_RESET</button>
                     </div>
-                    <div class="p-8 space-y-8 flex-grow overflow-auto">
+                    <div class="p-6 space-y-8 flex-grow overflow-auto">
                         <div>
-                            <p class="text-[10px] text-cyan-500 mb-3 font-bold uppercase tracking-widest">>> Result_Output</p>
-                            <div @click="copy(hide.result)" class="p-5 bg-slate-950 rounded-2xl border border-slate-800 text-xs break-all cursor-pointer hover:border-cyan-500 transition select-all min-h-[100px] leading-relaxed" x-text="hide.result || 'EMPTY.'"></div>
-                            <p class="text-[9px] text-slate-600 mt-2 italic">* Click to copy</p>
+                            <p class="text-[10px] text-cyan-500 mb-2 font-bold italic uppercase tracking-tighter">>> Result_Output</p>
+                            <div @click="copy(encode.result)" class="p-5 bg-slate-950 rounded-2xl border border-slate-800 text-[11px] break-all cursor-pointer hover:border-cyan-500 transition select-all min-h-[100px] leading-relaxed" x-text="encode.result || 'IDLE_WAITING...'"></div>
                         </div>
                         <div class="border-t border-slate-900 pt-8">
-                            <p class="text-[10px] text-indigo-400 mb-3 font-bold uppercase tracking-widest">>> Extracted_Payload</p>
-                            <div class="p-5 bg-slate-900/30 rounded-2xl border border-indigo-950 text-white font-bold text-sm min-h-[150px] whitespace-pre-wrap" x-text="reveal.output || 'No hidden payload found.'"></div>
-                        </div>
+    <div class="flex justify-between items-center mb-3">
+        <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">>> Extracted_Payload</p>
+        <span x-show="decode.bitType" x-text="decode.bitType" class="text-[9px] bg-indigo-900/50 text-indigo-300 px-2 py-0.5 rounded border border-indigo-500/30 font-bold"></span>
+    </div>
+    <div class="p-5 bg-slate-950 rounded-2xl border border-indigo-950 text-white font-bold text-sm min-h-[150px] whitespace-pre-wrap" x-text="decode.output || 'NO_DATA_EXTRACTED'"></div>
+</div>
                     </div>
                 </div>
             </div>
@@ -109,88 +106,69 @@
     </div>
 
     <script>
-        const MIMIC_DATA = {
-            ' ': '\u00A0', // NBSP
-            '.': '\u2024', // Leader dot
-            ';': '\u037E', // Greek question mark/punc
-            'I': '\u006C', // l (Small L)
-            'l': '\u0049'  // I (Capital i)
-        };
-        const ZWC = { 
-            base2: ['\u200B', '\u200C'],
-            base256: (() => {
-                let s = ['\u200B', '\u200C', '\u200D', '\u200E', '\u200F', '\uFEFF', '\u202A', '\u202B', '\u202C', '\u202D', '\u202E', '\u2060', '\u2061', '\u2062', '\u2063', '\u2064'];
-                for (let i = 0xE0100; i <= 0xE01EF; i++) { if (s.length >= 256) break; s.push(String.fromCodePoint(i)); }
-                return s;
-            })(),
-            markers: { B2: '\u2066', B256: '\u2067', B16BIT: '\u2068', END: '\u2069' }
-        };
+        const MIMIC_MAP = { ' ': '\u00A0', '.': '\u2024', ';': '\u037E', 'I': '\u006C', 'l': '\u0049' };
+        const MARKERS = { B2: '\u2066', B8: '\u2067', B16: '\u2068', B32: '\u2061', END: '\u2069' };
+        const ZWC_B2 = ['\u200B', '\u200C'];
 
-        function appData() {
+        function stealthEngine() {
             return {
-                tab: 'hide', mode: '16bit',
+                tab: 'encode', mode: '32',
                 mimic: { space: true, punc: true },
-                hide: { secret: '', cover: '', result: '' },
-                reveal: { input: '', output: '' },
+                encode: { secret: '', cover: '', result: '' },
+                decode: { input: '', output: '' },
 
-                submitHide() {
-                    if(!this.hide.secret || !this.hide.cover) return alert("Please fill in fields!");
-                    const bytes = new TextEncoder().encode(this.hide.secret);
+                processEncode() {
+                    if(!this.encode.secret || !this.encode.cover) return;
+                    const bytes = new TextEncoder().encode(this.encode.secret);
                     let payload = "", marker = "";
 
-                    if (this.mode === '16bit') {
-                        marker = ZWC.markers.B16BIT;
-                        bytes.forEach(b => payload += ZWC.base256[b]); // Fallback 16-bit logic an toàn
-                    } else if (this.mode === '8bit') {
-                        marker = ZWC.markers.B256;
-                        bytes.forEach(b => payload += ZWC.base256[b]);
-                    } else {
-                        marker = ZWC.markers.B2;
+                    if (this.mode === '2') {
+                        marker = MARKERS.B2;
                         const bin = Array.from(bytes).map(b => b.toString(2).padStart(8, '0')).join('');
-                        for (let bit of bin) payload += ZWC.base2[parseInt(bit)];
+                        for (let bit of bin) payload += ZWC_B2[parseInt(bit)];
+                    } else {
+                        // Hybrid Logic for 8, 16, 32 bit using Plane 14 mapping
+                        marker = (this.mode === '32') ? MARKERS.B32 : (this.mode === '16' ? MARKERS.B16 : MARKERS.B8);
+                        bytes.forEach(b => payload += String.fromCodePoint(0xE0100 + b));
                     }
 
-                    const fullSecret = marker + payload + ZWC.markers.END;
-                    let cArr = Array.from(this.hide.cover), pArr = Array.from(fullSecret), res = "", pIdx = 0;
+                    const fullPayload = marker + payload + MARKERS.END;
+                    let cArr = Array.from(this.encode.cover), pArr = Array.from(fullPayload), res = "", pIdx = 0;
 
                     for (let char of cArr) {
-                        let outChar = char;
-                        if (this.mimic.punc && MIMIC_DATA[char] && !/[\s]/.test(char)) outChar = Math.random() > 0.5 ? MIMIC_DATA[char] : char;
-                        if (this.mimic.space && char === ' ') outChar = Math.random() > 0.5 ? MIMIC_DATA[' '] : char;
-                        
-                        res += outChar;
-                        if (pIdx < pArr.length && /[\s,.\b!?;:]/.test(char)) res += pArr[pIdx++];
+                        let out = char;
+                        if(this.mimic.punc && MIMIC_MAP[char] && !/[\s]/.test(char)) out = Math.random() > 0.5 ? MIMIC_MAP[char] : char;
+                        if(this.mimic.space && char === ' ') out = Math.random() > 0.5 ? MIMIC_MAP[' '] : char;
+                        res += out;
+                        if(pIdx < pArr.length && /[\s,.\b!?;:]/.test(char)) res += pArr[pIdx++];
                     }
                     while(pIdx < pArr.length) res += pArr[pIdx++];
-                    this.hide.result = res;
+                    this.encode.result = res;
                 },
 
-                submitReveal() {
-                    const txt = this.reveal.input;
-                    const zwcOnly = Array.from(txt).filter(c => {
+                processDecode() {
+                    const txt = this.decode.input;
+                    const raw = Array.from(txt).filter(c => {
                         const cp = c.codePointAt(0);
-                        return (cp >= 0x200B && cp <= 0x2069) || (cp >= 0xE0100 && cp <= 0xE01EF) || cp === 0xFEFF;
+                        return (cp >= 0x200B && cp <= 0x2069) || (cp >= 0xE0100 && cp <= 0xE01EF);
                     }).join('');
 
-                    let part = "", type = "";
-                    if (zwcOnly.includes(ZWC.markers.B16BIT)) { type = '8bit'; part = zwcOnly.match(/\u2068(.*?)\u2069/)[1]; }
-                    else if (zwcOnly.includes(ZWC.markers.B256)) { type = '8bit'; part = zwcOnly.match(/\u2067(.*?)\u2069/)[1]; }
-                    else if (zwcOnly.includes(ZWC.markers.B2)) { type = '2bit'; part = zwcOnly.match(/\u2066(.*?)\u2069/)[1]; }
-                    else { return this.reveal.output = "No hidden data found."; }
-
-                    try {
+                    const match = raw.match(/[\u2066\u2067\u2068\u2061](.*?)[\u2069]/);
+                    if (match) {
+                        const type = match[0][0];
+                        const content = match[1];
                         let resBytes = [];
-                        if (type === '8bit') {
-                            resBytes = Array.from(part).map(c => ZWC.base256.indexOf(c)).filter(b => b !== -1);
-                        } else {
-                            const bits = Array.from(part).map(c => ZWC.base2.indexOf(c)).join('');
+                        if (type === MARKERS.B2) {
+                            const bits = Array.from(content).map(c => ZWC_B2.indexOf(c)).join('');
                             for (let i = 0; i < bits.length; i += 8) resBytes.push(parseInt(bits.substr(i, 8), 2));
+                        } else {
+                            resBytes = Array.from(content).map(c => c.codePointAt(0) - 0xE0100);
                         }
-                        this.reveal.output = new TextDecoder().decode(new Uint8Array(resBytes));
-                    } catch(e) { this.reveal.output = "Error decoding structure!"; }
+                        this.decode.output = new TextDecoder().decode(new Uint8Array(resBytes));
+                    } else { this.decode.output = "Payload not found."; }
                 },
                 copy(t) { if(t) { navigator.clipboard.writeText(t); alert("Copied!"); } },
-                clear() { this.hide = { secret: '', cover: '', result: '' }; this.reveal = { input: '', output: '' }; }
+                reset() { this.encode = { secret: '', cover: '', result: '' }; this.decode = { input: '', output: '' }; }
             }
         }
     </script>
