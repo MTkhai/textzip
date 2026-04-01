@@ -4,100 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZWC Datahider Lite</title>
+    <meta name="theme-color" content="#06b6d4">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlN0ZWFsdGggUHJvdG9jb2wgdjcuMCIsCiAgInNob3J0X25hbWUiOiAiU3RlYWx0aFY3IiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMTA0MDkiLAogICJ0aGVtZV9jb2xvciI6ICIjMDZiNmQ0IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS81MTIvNTQzLzU0MzIwNC5wbmciLAogICAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgIH1cbiAgXQp9">
+    
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         [x-cloak] { display: none !important; }
-        body { background: #020617; font-family: 'JetBrains Mono', monospace; }
-        .cyber-panel { background: rgba(15, 23, 42, 0.9); border: 1px solid #1e293b; }
-        .st-input { background: #000; border: 1px solid #334155; color: #94a3b8; }
+        body { background: #020617; font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+        .cyber-panel { background: rgba(15, 23, 42, 0.9); border: 1px solid #1e293b; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+        .st-input { background: #000; border: 1px solid #334155; color: #94a3b8; transition: 0.2s; }
         .st-input:focus { border-color: #06b6d4; outline: none; color: #fff; }
     </style>
 </head>
-<body class="text-slate-400 p-4 lg:p-10" x-data="stealthV6()" x-cloak>
+<body class="text-slate-400 p-4 lg:p-10" x-data="stealthV7Full()" x-cloak>
 
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-7xl mx-auto">
         <header class="flex flex-col md:flex-row justify-between items-end border-b border-slate-800 pb-6 mb-10 gap-4">
             <div>
-                <h1 class="text-3xl font-black text-white italic tracking-tighter">ZWC Datahider v6.0</h1>
-                <p class="text-[10px] text-cyan-500 uppercase tracking-[0.4em] mt-2 font-bold">ZWC Datahider Lite</p>
+                <h1 class="text-3xl font-black text-white tracking-tighter italic">ZWC Datahider v7.0</h1>
+                <p class="text-[10px] text-cyan-500 uppercase tracking-[0.4em] mt-2 font-bold">ZWC Datahider Lite<</p>
             </div>
-            <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800">
-                <button @click="tab = 'encode'" :class="tab === 'encode' ? 'bg-cyan-600 text-white' : 'text-slate-500'" class="px-8 py-2 rounded-lg text-xs font-black transition-all">ENCODE</button>
-                <button @click="tab = 'decode'" :class="tab === 'decode' ? 'bg-indigo-600 text-white' : 'text-slate-500'" class="px-8 py-2 rounded-lg text-xs font-black transition-all">DECODE</button>
+            <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800 shadow-inner">
+                <button @click="tab = 'encode'" :class="tab === 'encode' ? 'bg-cyan-600 text-white shadow-lg' : 'text-slate-500'" class="px-8 py-2.5 rounded-lg text-xs font-black transition-all">ENCODE</button>
+                <button @click="tab = 'decode'" :class="tab === 'decode' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500'" class="px-8 py-2.5 rounded-lg text-xs font-black transition-all">DECODE</button>
             </div>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            <div class="lg:col-span-7 space-y-6">
+            <div class="lg:col-span-8">
                 <div class="cyber-panel p-8 rounded-3xl space-y-6">
                     <template x-if="tab === 'encode'">
                         <div class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 bg-black/40 rounded-2xl border border-slate-800/50">
                                 <div class="space-y-2">
-                                    <label class="text-[10px] font-bold text-cyan-500 uppercase">Bit Stealth Mode</label>
-                                    <select x-model="config.mode" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-xs text-white outline-none">
+                                    <label class="text-[10px] font-bold text-cyan-500 uppercase block">Bit Stealth Mode</label>
+                                    <select x-model="config.mode" class="w-full bg-slate-950 text-xs border border-slate-800 p-2.5 rounded-lg text-white outline-none cursor-pointer">
                                         <option value="64">64-Bit(Extreme)</option>
                                         <option value="32">32-Bit(Hybrid)</option>
                                         <option value="16">16-Bit(Balanced)</option>
+                                        <option value="8">8-Bit(Standard)</option>
                                         <option value="2">2-Bit(Classic)</option>
                                     </select>
                                 </div>
-                                <div class="space-y-2">
-                                    <label class="text-[10px] font-bold text-cyan-500 uppercase">Shape stealth Options</label>
-                                    <div class="flex gap-4 pt-2">
-                                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" x-model="config.mimicSpace" class="accent-cyan-500"><span class="text-[10px]">SPACE</span></label>
-                                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" x-model="config.mimicPunc" class="accent-cyan-500"><span class="text-[10px]">HOMO</span></label>
+                                <div class="space-y-3">
+                                    <label class="text-[10px] font-bold text-cyan-500 uppercase block">Shape stealth Options</label>
+                                    <div class="grid grid-cols-2 gap-x-4 gap-y-2 pt-1">
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input type="checkbox" x-model="config.mimicSpace" class="w-3.5 h-3.5 accent-cyan-500">
+                                            <span class="text-[10px] group-hover:text-cyan-400 transition">SPACE</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input type="checkbox" x-model="config.mimicPunc" class="w-3.5 h-3.5 accent-cyan-500">
+                                            <span class="text-[10px] group-hover:text-cyan-400 transition">PUNC</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input type="checkbox" x-model="config.mimicHomo" class="w-3.5 h-3.5 accent-cyan-500">
+                                            <span class="text-[10px] group-hover:text-cyan-400 transition">HOMO</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input type="checkbox" x-model="config.redundancy" class="w-3.5 h-3.5 accent-cyan-500">
+                                            <span class="text-[10px] group-hover:text-cyan-400 transition">REDUCE-LOSS</span>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="space-y-2">
-                                <label class="text-[10px] text-slate-500 uppercase font-bold">Secret Message</label>
-                                <textarea x-model="encode.secret" class="w-full st-input rounded-2xl p-4 text-sm h-32" placeholder="Secret data..."></textarea>
+                                <label class="text-[10px] font-bold uppercase text-slate-500 tracking-widest">Secret Message</label>
+                                <textarea x-model="encode.secret" class="w-full st-input rounded-2xl p-4 text-sm h-32" placeholder="Please enter the secret message..."></textarea>
                             </div>
+
                             <div class="space-y-2">
                                 <div class="flex justify-between items-center">
-                                    <label class="text-[10px] text-slate-500 uppercase font-bold">Cover Text</label>
-                                    <button @click="generateCover()" class="text-[9px] text-cyan-600 hover:underline">RANDOM_COVER</button>
+                                    <label class="text-[10px] font-bold uppercase text-slate-500 tracking-widest">Cover Text</label>
+
                                 </div>
-                                <textarea x-model="encode.cover" class="w-full st-input rounded-2xl p-4 text-sm h-32" placeholder="Carrier text..."></textarea>
+                                <textarea x-model="encode.cover" class="w-full st-input rounded-2xl p-4 text-sm h-32" placeholder="Please, enter the cover text..."></textarea>
                             </div>
-                            <button @click="executeEncode()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black py-5 rounded-2xl transition-all">DEPLOY SEALTH</button>
+
+                            <button @click="executeEncode()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black py-5 rounded-2xl transition-all shadow-xl shadow-cyan-900/10 active:scale-95">DEPLOY SEALTH</button>
                         </div>
                     </template>
 
                     <template x-if="tab === 'decode'">
                         <div class="space-y-6">
-                            <label class="text-[10px] font-bold text-indigo-400 uppercase block border-b border-slate-800 pb-2">Stream Capture</label>
-                            <textarea x-model="decode.input" class="w-full st-input rounded-2xl p-4 text-sm h-80" placeholder="Paste text here..."></textarea>
-                            <button @click="executeDecode()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-5 rounded-2xl transition-all">DECODE_STREAM</button>
+                            <label class="text-[10px] font-bold uppercase block border-b border-slate-800 pb-2 text-indigo-400">Captured Signal Analyzer</label>
+                            <textarea x-model="decode.input" class="w-full st-input rounded-2xl p-4 text-sm h-[400px]" placeholder="Paste encoded stream here..."></textarea>
+                            <button @click="executeDecode()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-5 rounded-2xl transition-all shadow-xl active:scale-95">RECOVER PAYLOAD</button>
                         </div>
                     </template>
                 </div>
             </div>
 
-            <div class="lg:col-span-5 flex flex-col gap-6">
-                <div class="cyber-panel rounded-3xl flex-grow flex flex-col overflow-hidden">
+            <div class="lg:col-span-4">
+                <div class="cyber-panel rounded-3xl flex flex-col h-full min-h-[500px]">
                     <div class="p-5 bg-slate-900/40 border-b border-slate-900 flex justify-between items-center">
-                        <span class="text-[10px] font-black text-slate-500">PROTOCOL_LOG</span>
-                        <button @click="reset()" class="text-[9px] text-red-500 font-bold uppercase">Reset</button>
+                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-2">System_Audit</span>
+                        <button @click="reset()" class="text-[9px] text-red-500 hover:underline">RESET</button>
                     </div>
+                    
                     <div class="p-8 space-y-8 flex-grow overflow-auto">
                         <div x-show="tab === 'encode'">
-                            <div class="flex justify-between mb-2">
-                                <span class="text-[10px] font-bold uppercase">Stealth Score</span>
-                                <span class="text-[10px] font-bold" :class="healthColor()" x-text="healthPercent + '%'"></span>
+                            <div class="flex justify-between mb-2 text-[10px] uppercase font-black tracking-tight">
+                                <span>Immunity Level</span>
+                                <span :class="scoreColor()" x-text="score + '%'"></span>
                             </div>
-                            <div class="w-full bg-slate-900 rounded-full h-1.5"><div class="h-full transition-all duration-500" :class="healthBg()" :style="'width:' + healthPercent + '%'"></div></div>
+                            <div class="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden">
+                                <div class="h-full transition-all duration-700" :class="scoreBg()" :style="'width:' + score + '%'"></div>
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-[10px] text-cyan-500 mb-2 font-black uppercase">>>Result_Output</p>
-                            <div @click="copy(encode.result)" class="p-5 bg-black/80 rounded-2xl border border-slate-800 text-[11px] break-all cursor-pointer hover:border-cyan-500 transition select-all min-h-[100px]" x-text="encode.result || 'Idle.'"></div>
+
+                        <div class="space-y-3">
+                            <p class="text-[10px] font-black uppercase text-cyan-500 italic tracking-widest">>>Result_Output</p>
+                            <div @click="copy(encode.result)" class="st-input p-5 rounded-2xl text-[11px] break-all cursor-pointer hover:border-cyan-500 transition-colors select-all min-h-[120px]" x-text="encode.result || 'Awaiting Input...'"></div>
+                            <p class="text-[8px] text-slate-600 uppercase" x-show="encode.result">Click to copy result</p>
                         </div>
-                        <div class="border-t border-slate-800 pt-8">
-                            <p class="text-[10px] text-indigo-400 mb-2 font-black uppercase">>>Extracted_Payload</p>
-                            <div class="p-5 bg-black/80 rounded-2xl border border-indigo-950 text-white font-bold text-sm min-h-[150px] whitespace-pre-wrap" x-text="decode.output || 'No payload.'"></div>
+
+                        <div class="space-y-3 border-t border-slate-800 pt-8">
+                            <p class="text-[10px] font-black uppercase text-indigo-400 italic tracking-widest">>>Extracted_Payload</p>
+                            <div class="st-input p-5 rounded-2xl text-sm text-white font-bold min-h-[180px] bg-black/40 border-indigo-950" x-text="decode.output || 'No Payload Detected.'"></div>
                         </div>
                     </div>
                 </div>
@@ -106,18 +132,18 @@
     </div>
 
     <script>
-        const MIMIC_MAP = { ' ': '\u00A0', '.': '\u2024', ';': '\u037E', 'I': '\u006C', 'l': '\u0049' };
-        const MARKERS = { B2: '\u2066', B8: '\u2067', B16: '\u2068', B32: '\u2061', B64: '\u2062', END: '\u2069' };
+        const MARKERS = { B64: '\u2062', B32: '\u2061', B16: '\u2068', B8: '\u2067', B2: '\u2066', END: '\u2069' };
+        const MIMICS = { space: '\u00A0', punc: {'.': '\u2024', ';': '\u037E'}, homo: {'I': '\u006C', 'l': '\u0049'} };
 
-        function stealthV6() {
+        function stealthV7Full() {
             return {
-                tab: 'encode', healthPercent: 0,
-                config: { mode: '64', mimicSpace: true, mimicPunc: true },
+                tab: 'encode', score: 0,
+                config: { mode: '64', mimicSpace: true, mimicPunc: true, mimicHomo: true, redundancy: true },
                 encode: { secret: '', cover: '', result: '' },
                 decode: { input: '', output: '' },
 
                 executeEncode() {
-                    if(!this.encode.secret || !this.encode.cover) return;
+                    if(!this.encode.secret || !this.encode.cover) return alert("Missing Input!");
                     const bytes = new TextEncoder().encode(this.encode.secret);
                     let payload = "", marker = MARKERS['B' + this.config.mode];
 
@@ -128,19 +154,23 @@
                         bytes.forEach(b => payload += String.fromCodePoint(0xE0100 + b));
                     }
 
-                    const fullP = marker + payload + MARKERS.END;
-                    let cArr = Array.from(this.encode.cover), pArr = Array.from(fullP), res = "", pIdx = 0;
+                    // Redundancy: Double payload if Anti-Loss enabled
+                    const finalPayload = marker + payload + (this.config.redundancy ? payload : "") + MARKERS.END;
+                    let cArr = Array.from(this.encode.cover), pArr = Array.from(finalPayload), res = "", pIdx = 0;
 
                     for (let char of cArr) {
                         let out = char;
-                        if(this.config.mimicPunc && MIMIC_MAP[char] && !/[\s]/.test(char)) out = Math.random() > 0.7 ? MIMIC_MAP[char] : char;
-                        if(this.config.mimicSpace && char === ' ') out = Math.random() > 0.5 ? MIMIC_MAP[' '] : char;
+                        // Mimicry Toggles
+                        if(this.config.mimicSpace && char === ' ') out = Math.random() > 0.5 ? MIMICS.space : char;
+                        if(this.config.mimicPunc && MIMICS.punc[char]) out = Math.random() > 0.7 ? MIMICS.punc[char] : char;
+                        if(this.config.mimicHomo && MIMICS.homo[char]) out = Math.random() > 0.6 ? MIMICS.homo[char] : char;
                         res += out;
                         if(pIdx < pArr.length && /[\s,.\b!?;:]/.test(char)) res += pArr[pIdx++];
                     }
                     while(pIdx < pArr.length) res += pArr[pIdx++];
                     this.encode.result = res;
-                    this.calculateHealth();
+                    this.calculateScore();
+                    this.copy(this.encode.result, true); // Silent auto-copy
                 },
 
                 executeDecode() {
@@ -149,7 +179,7 @@
                         const cp = c.codePointAt(0);
                         return (cp >= 0x200B && cp <= 0x2069) || (cp >= 0xE0100 && cp <= 0xE01EF);
                     }).join('');
-                    const match = raw.match(/[\u2066\u2067\u2068\u2061\u2062](.*?)[\u2069]/);
+                    const match = raw.match(/[\u2061\u2062\u2066\u2067\u2068](.*?)[\u2069]/);
                     if (match) {
                         const type = match[0][0], content = match[1];
                         let resBytes = [];
@@ -157,28 +187,22 @@
                             const bits = Array.from(content).map(c => c === '\u200B' ? '0' : '1').join('');
                             for (let i = 0; i < bits.length; i += 8) resBytes.push(parseInt(bits.substr(i, 8), 2));
                         } else {
-                            resBytes = Array.from(content).map(c => c.codePointAt(0) - 0xE0100);
+                            // Redundancy Recovery: If halved, take first half
+                            const halfLen = Math.floor(content.length / 2);
+                            const dataPart = (this.config.redundancy && content.length % 2 === 0) ? content.substring(0, halfLen) : content;
+                            resBytes = Array.from(dataPart).map(c => c.codePointAt(0) - 0xE0100);
                         }
                         this.decode.output = new TextDecoder().decode(new Uint8Array(resBytes));
-                    } else { this.decode.output = "No data found."; }
+                    } else { this.decode.output = "Error: Payload Null or Signal Corrupted."; }
                 },
 
-                calculateHealth() {
+                calculateScore() {
                     const ratio = this.encode.cover.length / (this.encode.secret.length || 1);
-                    this.healthPercent = Math.min(100, Math.floor(ratio * 12));
+                    this.score = Math.min(100, Math.floor(ratio * 12));
                 },
-                healthColor() { return this.healthPercent > 70 ? 'text-green-500' : (this.healthPercent > 40 ? 'text-yellow-500' : 'text-red-500'); },
-                healthBg() { return this.healthPercent > 70 ? 'bg-green-500' : (this.healthPercent > 40 ? 'bg-yellow-500' : 'bg-red-500'); },
-                generateCover() {
-                    const pool = [
-                        "The high-tech laboratory on the 5th floor is currently undergoing routine maintenance.",
-                        "Electrical infrastructure stability confirmed. Server racks are operating at optimal temperature.",
-                        "Data transmission logs indicate consistent throughput across all wireless protocols.",
-                        "Radiative cooling systems maintain 5-8 degree difference from ambient environment."
-                    ];
-                    this.encode.cover = pool[Math.floor(Math.random() * pool.length)];
-                },
-                copy(t) { if(t) { navigator.clipboard.writeText(t); alert("Copied!"); } },
+                scoreColor() { return this.score > 70 ? 'text-green-500' : (this.score > 40 ? 'text-yellow-500' : 'text-red-500'); },
+                scoreBg() { return this.score > 70 ? 'bg-green-500' : (this.score > 40 ? 'bg-yellow-500' : 'bg-red-500'); },
+                copy(t, silent = false) { if(t) { navigator.clipboard.writeText(t); if(!silent) alert("Copied!"); } },
                 reset() { location.reload(); }
             }
         }
