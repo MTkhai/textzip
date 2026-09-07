@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZWC Datahider Lite v8.0</title>
+    <title>ZWC Datahider Lite v9.0</title>
     <meta name="theme-color" content="#06b6d4">
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,12 +21,13 @@
     <div class="max-w-7xl mx-auto">
         <header class="flex flex-col md:flex-row justify-between items-end border-b border-slate-800 pb-6 mb-10 gap-4">
             <div>
-                <h1 class="text-3xl font-black text-white tracking-tighter italic">ZWC Datahider v8.0 </h1>
+                <h1 class="text-3xl font-black text-white tracking-tighter italic">ZWC Datahider v9.0 </span></h1>
                 <p class="text-[10px] text-cyan-500 uppercase tracking-[0.4em] mt-2 font-bold">ZWC Datahider Lite</p>
             </div>
             <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800 shadow-inner">
                 <button @click="tab = 'encode'" :class="tab === 'encode' ? 'bg-cyan-600 text-white shadow-lg' : 'text-slate-500'" class="px-6 py-2.5 rounded-lg text-xs font-black transition-all">ENCODE</button>
                 <button @click="tab = 'decode'" :class="tab === 'decode' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500'" class="px-6 py-2.5 rounded-lg text-xs font-black transition-all">DECODE</button>
+                <button @click="tab = 'strip'" :class="tab === 'strip' ? 'bg-rose-600 text-white shadow-lg' : 'text-slate-500'" class="px-6 py-2.5 rounded-lg text-xs font-black transition-all">STRIPPER</button>
             </div>
         </header>
 
@@ -40,6 +41,7 @@
                             <div class="space-y-2">
                                 <label class="text-[10px] font-bold text-cyan-500 uppercase block">Bit Stealth Mode</label>
                                 <select x-model="config.mode" @change="checkPlatformCompatibility()" class="w-full bg-slate-950 text-xs border border-slate-800 p-2.5 rounded-lg text-white outline-none cursor-pointer">
+                                    <option value="64">64-Bit(Extreme)</option>
                                     <option value="32">32-Bit(Hybrid)</option>
                                     <option value="16">16-Bit(Balanced)</option>
                                     <option value="8">8-Bit(Standard)</option>
@@ -108,6 +110,20 @@
                         <button @click="executeDecode()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-5 rounded-2xl transition-all shadow-xl active:scale-95">RECOVER PAYLOAD</button>
                     </div>
 
+                    <!-- STRIPPER TAB -->
+                    <div x-show="tab === 'strip'" class="space-y-6">
+                        <label class="text-[10px] font-bold uppercase block border-b border-slate-800 pb-2 text-rose-400">ZWC Text Cleaner</label>
+                        <textarea x-model="strip.input" @input="executeStrip()" class="w-full st-input rounded-2xl p-4 text-sm h-[280px]" placeholder="Dán văn bản cần lọc mã ẩn vào đây..."></textarea>
+                        <button @click="copy(strip.output)" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-black py-4 rounded-2xl transition-all shadow-xl active:scale-95">
+    COPY CLEANED TEXT
+</button>
+                        
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold uppercase text-slate-500 tracking-widest">Cleaned Output</label>
+                            <div @click="copy(strip.output)" class="st-input p-4 rounded-2xl text-xs text-emerald-400 break-all select-all min-h-[80px] cursor-pointer whitespace-pre-wrap" x-text="strip.output || 'Awaiting input...'"></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -128,23 +144,23 @@
                                     <span :class="scoreColor()" x-text="score + '%'"></span>
                                 </div>
                                 
-                                <!-- THANH PROGRESS BAR ĐÃ KHÔI PHÚC CHUẨN ĐẸP -->
-                                <div class="w-full bg-slate-950 border border-slate-800/80 rounded-full h-3 p-0.5 overflow-hidden shadow-inner">
-                                    <div class="h-full rounded-full transition-all duration-500 ease-out shadow-lg" :class="scoreBg()" :style="'width:' + score + '%'"></div>
+                                <!-- BAR ĐƯỢC LÀM TO VÀ RÕ RÀNG HƠN BẰNG h-3.5 + PADDING -->
+                                <div class="w-full bg-slate-950 rounded-full h-3.5 p-0.5 border border-slate-800 overflow-hidden shadow-inner">
+                                    <div class="h-full rounded-full transition-all duration-700 ease-out shadow-lg" :class="scoreBg()" :style="'width:' + score + '%'"></div>
                                 </div>
 
-                                <div class="mt-5 p-4 bg-black/40 rounded-2xl border border-slate-800 text-[10px] space-y-2">
+                                <div class="mt-4 p-3 bg-black/40 rounded-xl border border-slate-800 text-[10px] space-y-1">
                                     <div class="flex justify-between">
                                         <span class="text-slate-500">Original Size:</span>
-                                        <span class="text-white font-mono font-bold" x-text="stats.orig + ' B'"></span>
+                                        <span class="text-white font-mono" x-text="stats.orig + ' B'"></span>
                                     </div>
                                     <div class="flex justify-between">
                                         <span class="text-slate-500">Payload Size:</span>
-                                        <span class="text-cyan-400 font-mono font-bold" x-text="stats.packed + ' B'"></span>
+                                        <span class="text-cyan-400 font-mono" x-text="stats.packed + ' B'"></span>
                                     </div>
                                     <div class="flex justify-between" x-show="config.compress">
                                         <span class="text-slate-500">Compression Ratio:</span>
-                                        <span class="text-emerald-400 font-mono font-bold" x-text="stats.ratio + '%'"></span>
+                                        <span class="text-emerald-400 font-mono" x-text="stats.ratio + '%'"></span>
                                     </div>
                                 </div>
                             </div>
@@ -160,6 +176,21 @@
                         <div x-show="tab === 'decode'" class="space-y-3">
                             <p class="text-[10px] font-black uppercase text-indigo-400 italic tracking-widest">>>Extracted_Payload</p>
                             <div class="st-input p-5 rounded-2xl text-sm text-white font-bold min-h-[180px] bg-black/40 border-indigo-950" x-text="decode.output || 'No Payload Detected.'"></div>
+                        </div>
+
+                        <!-- AUDIT STRIPPER -->
+                        <div x-show="tab === 'strip'" class="space-y-4">
+                            <p class="text-[10px] font-black uppercase text-rose-500 italic tracking-widest">>>Sanitization_Stats</p>
+                            <div class="p-4 bg-black/40 rounded-2xl border border-slate-800 space-y-3 text-[11px]">
+                                <div class="flex justify-between">
+                                    <span class="text-slate-500">ZWC Removed:</span>
+                                    <span class="text-rose-400 font-mono font-bold" x-text="strip.removedCount + ' chars'"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-500">Status:</span>
+                                    <span class="font-mono font-bold" :class="strip.removedCount > 0 ? 'text-rose-400' : 'text-emerald-400'" x-text="strip.removedCount > 0 ? 'PURGED' : 'CLEAN'"></span>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -181,6 +212,7 @@
                 config: { mode: '64', compress: true, space: true, punc: true, homo: true, redundancy: false },
                 encode: { secret: '', cover: '', result: '' },
                 decode: { input: '', output: '' },
+                strip: { input: '', output: '', removedCount: 0 },
                 stats: { orig: 0, packed: 0, ratio: 0 },
                 platforms: [
                     { name: 'Discord', safe: true },
@@ -228,7 +260,7 @@
                             payload += (bit === '0' ? '\u200B' : '\u200C');
                         }
                     } else {
-                        // Protocol Base-16 U+E0100 -> U+E010F
+                        // Protocol v8.1 chuẩn dải Base-16 U+E0100 -> U+E010F
                         bytes.forEach(b => {
                             const highNibble = (b >> 4) & 0x0F;
                             const lowNibble = b & 0x0F;
@@ -309,6 +341,25 @@
                     } else { 
                         this.decode.output = "Error: Payload Null or Signal Corrupted."; 
                     }
+                },
+
+                executeStrip() {
+                    if (!this.strip.input) {
+                        this.strip.output = '';
+                        this.strip.removedCount = 0;
+                        return;
+                    }
+
+                    const origLen = Array.from(this.strip.input).length;
+                    let text = this.strip.input;
+
+                    text = text.replace(/[\u200B-\u200D\u2060-\u2069\uFEFF]/gu, '');
+                    text = text.replace(/[\u{E0100}-\u{E01EF}]/gu, '');
+
+                    const cleanLen = Array.from(text).length;
+
+                    this.strip.output = text;
+                    this.strip.removedCount = origLen - cleanLen;
                 },
 
                 calculateScore() {
