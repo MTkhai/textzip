@@ -5,23 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZWC Datahider Lite v9.0</title>
     <meta name="theme-color" content="#06b6d4">
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
-    <style>
-        [x-cloak] { display: none !important; }
-        body { background: #020617; font-family: 'JetBrains Mono', 'Fira Code', monospace; }
-        .cyber-panel { background: rgba(15, 23, 42, 0.9); border: 1px solid #1e293b; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
-        .st-input { background: #000; border: 1px solid #334155; color: #94a3b8; transition: 0.2s; }
-        .st-input:focus { border-color: #06b6d4; outline: none; color: #fff; }
-    </style>
+    <!-- Alpine.js CDN -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="text-slate-400 p-4 lg:p-10" x-data="stealthV8Full()" x-cloak>
+<body class="text-slate-400 p-4 lg:p-10" x-data="stealthV8Full">
 
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-7xl mx-auto" x-cloak>
         <header class="flex flex-col md:flex-row justify-between items-end border-b border-slate-800 pb-6 mb-10 gap-4">
             <div>
-                <h1 class="text-3xl font-black text-white tracking-tighter italic">ZWC Datahider v9.0 </span></h1>
+                <h1 class="text-3xl font-black text-white tracking-tighter italic">ZWC Datahider v9.0 </h1>
                 <p class="text-[10px] text-cyan-500 uppercase tracking-[0.4em] mt-2 font-bold">ZWC Datahider Lite</p>
             </div>
             <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800 shadow-inner">
@@ -34,7 +30,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div class="lg:col-span-8">
                 <div class="cyber-panel p-8 rounded-3xl space-y-6">
-                    
+                   
                     <!-- ENCODE TAB -->
                     <div x-show="tab === 'encode'" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 bg-black/40 rounded-2xl border border-slate-800/50">
@@ -80,7 +76,7 @@
 
                         <div class="p-4 bg-slate-950/80 rounded-2xl border border-slate-800 space-y-2">
                             <span class="text-[9px] font-black uppercase tracking-widest text-slate-500">Cross-Platform Stripping Check</span>
-                            <div class="grid grid-cols-5 gap-2 pt-1">
+                            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 pt-1">
                                 <template x-for="item in platforms" :key="item.name">
                                     <div class="flex flex-col items-center p-2 rounded-xl border bg-black/30" :class="item.safe ? 'border-green-500/30 text-green-400' : 'border-red-500/30 text-red-400'">
                                         <span class="text-[10px] font-bold uppercase" x-text="item.name"></span>
@@ -92,12 +88,12 @@
 
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold uppercase text-slate-500 tracking-widest">Secret Message</label>
-                            <textarea x-model="encode.secret" class="w-full st-input rounded-2xl p-4 text-sm h-28" placeholder="Nhập tin nhắn ẩn..."></textarea>
+                            <textarea x-model="encode.secret" class="w-full st-input rounded-2xl p-4 text-sm h-28" placeholder="Enter hidden message..."></textarea>
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold uppercase text-slate-500 tracking-widest">Cover Text</label>
-                            <textarea x-model="encode.cover" class="w-full st-input rounded-2xl p-4 text-sm h-28" placeholder="Nhập văn bản bọc..."></textarea>
+                            <textarea x-model="encode.cover" class="w-full st-input rounded-2xl p-4 text-sm h-28" placeholder="Enter cover text..."></textarea>
                         </div>
 
                         <button @click="executeEncode()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black py-4 rounded-2xl transition-all shadow-xl active:scale-95">DEPLOY STEALTH</button>
@@ -106,21 +102,21 @@
                     <!-- DECODE TAB -->
                     <div x-show="tab === 'decode'" class="space-y-6">
                         <label class="text-[10px] font-bold uppercase block border-b border-slate-800 pb-2 text-indigo-400">Captured Signal Analyzer</label>
-                        <textarea x-model="decode.input" class="w-full st-input rounded-2xl p-4 text-sm h-[380px]" placeholder="Dán đoạn mã ẩn vào đây..."></textarea>
+                        <textarea x-model="decode.input" class="w-full st-input rounded-2xl p-4 text-sm h-[380px]" placeholder="Paste hidden payload here..."></textarea>
                         <button @click="executeDecode()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-5 rounded-2xl transition-all shadow-xl active:scale-95">RECOVER PAYLOAD</button>
                     </div>
 
                     <!-- STRIPPER TAB -->
                     <div x-show="tab === 'strip'" class="space-y-6">
                         <label class="text-[10px] font-bold uppercase block border-b border-slate-800 pb-2 text-rose-400">ZWC Text Cleaner</label>
-                        <textarea x-model="strip.input" @input="executeStrip()" class="w-full st-input rounded-2xl p-4 text-sm h-[280px]" placeholder="Dán văn bản cần lọc mã ẩn vào đây..."></textarea>
+                        <textarea x-model="strip.input" @input="executeStrip()" class="w-full st-input rounded-2xl p-4 text-sm h-[280px]" placeholder="Paste text to strip hidden code here..."></textarea>
                         <button @click="copy(strip.output)" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-black py-4 rounded-2xl transition-all shadow-xl active:scale-95">
-    COPY CLEANED TEXT
-</button>
-                        
+                            COPY CLEANED TEXT
+                        </button>
+                       
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold uppercase text-slate-500 tracking-widest">Cleaned Output</label>
-                            <div @click="copy(strip.output)" class="st-input p-4 rounded-2xl text-xs text-emerald-400 break-all select-all min-h-[80px] cursor-pointer whitespace-pre-wrap" x-text="strip.output || 'Awaiting input...'"></div>
+                            <div @click="copy(strip.output)" class="st-input p-4 rounded-2xl text-xs text-emerald-400 break-all select-all min-h-[80px] cursor-pointer whitespace-pre-wrap" x-text="strip.output || 'Awaiting input...'">Awaiting input...</div>
                         </div>
                     </div>
 
@@ -134,17 +130,16 @@
                         <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-2">System_Audit</span>
                         <button @click="reset()" class="text-[9px] text-red-500 hover:underline">RESET</button>
                     </div>
-                    
+                   
                     <div class="p-8 space-y-8 flex-grow overflow-auto">
                         <!-- AUDIT ENCODE -->
                         <div x-show="tab === 'encode'" class="space-y-6">
                             <div>
                                 <div class="flex justify-between mb-2 text-[10px] uppercase font-black tracking-tight">
                                     <span>Immunity Level</span>
-                                    <span :class="scoreColor()" x-text="score + '%'"></span>
+                                    <span :class="scoreColor()" x-text="score + '%'">0%</span>
                                 </div>
-                                
-                                <!-- BAR ĐƯỢC LÀM TO VÀ RÕ RÀNG HƠN BẰNG h-3.5 + PADDING -->
+                               
                                 <div class="w-full bg-slate-950 rounded-full h-3.5 p-0.5 border border-slate-800 overflow-hidden shadow-inner">
                                     <div class="h-full rounded-full transition-all duration-700 ease-out shadow-lg" :class="scoreBg()" :style="'width:' + score + '%'"></div>
                                 </div>
@@ -152,43 +147,42 @@
                                 <div class="mt-4 p-3 bg-black/40 rounded-xl border border-slate-800 text-[10px] space-y-1">
                                     <div class="flex justify-between">
                                         <span class="text-slate-500">Original Size:</span>
-                                        <span class="text-white font-mono" x-text="stats.orig + ' B'"></span>
+                                        <span class="text-white font-mono" x-text="stats.orig + ' B'">0 B</span>
                                     </div>
                                     <div class="flex justify-between">
                                         <span class="text-slate-500">Payload Size:</span>
-                                        <span class="text-cyan-400 font-mono" x-text="stats.packed + ' B'"></span>
+                                        <span class="text-cyan-400 font-mono" x-text="stats.packed + ' B'">0 B</span>
                                     </div>
                                     <div class="flex justify-between" x-show="config.compress">
                                         <span class="text-slate-500">Compression Ratio:</span>
-                                        <span class="text-emerald-400 font-mono" x-text="stats.ratio + '%'"></span>
+                                        <span class="text-emerald-400 font-mono" x-text="stats.ratio + '%'">0%</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="space-y-3">
-                                <p class="text-[10px] font-black uppercase text-cyan-500 italic tracking-widest">>>Result_Output</p>
-                                <div @click="copy(encode.result)" class="st-input p-5 rounded-2xl text-[11px] break-all cursor-pointer hover:border-cyan-500 transition-colors select-all min-h-[100px]" x-text="encode.result || 'Awaiting Input...'"></div>
-                                <p class="text-[8px] text-slate-600 uppercase" x-show="encode.result">Click to copy result</p>
+                                <p class="text-[10px] font-black uppercase text-cyan-500 italic tracking-widest">&gt;&gt;Result_Output</p>
+                                <div @click="copy(encode.result)" class="st-input p-5 rounded-2xl text-[11px] break-all cursor-pointer hover:border-cyan-500 transition-colors select-all min-h-[100px]" x-text="encode.result || 'Awaiting Input...'">Awaiting Input...</div>
                             </div>
                         </div>
 
                         <!-- AUDIT DECODE -->
                         <div x-show="tab === 'decode'" class="space-y-3">
-                            <p class="text-[10px] font-black uppercase text-indigo-400 italic tracking-widest">>>Extracted_Payload</p>
-                            <div class="st-input p-5 rounded-2xl text-sm text-white font-bold min-h-[180px] bg-black/40 border-indigo-950" x-text="decode.output || 'No Payload Detected.'"></div>
+                            <p class="text-[10px] font-black uppercase text-indigo-400 italic tracking-widest">&gt;&gt;Extracted_Payload</p>
+                            <div class="st-input p-5 rounded-2xl text-sm text-white font-bold min-h-[180px] bg-black/40 border-indigo-950" x-text="decode.output || 'No Payload Detected.'">No Payload Detected.</div>
                         </div>
 
                         <!-- AUDIT STRIPPER -->
                         <div x-show="tab === 'strip'" class="space-y-4">
-                            <p class="text-[10px] font-black uppercase text-rose-500 italic tracking-widest">>>Sanitization_Stats</p>
+                            <p class="text-[10px] font-black uppercase text-rose-500 italic tracking-widest">&gt;&gt;Sanitization_Stats</p>
                             <div class="p-4 bg-black/40 rounded-2xl border border-slate-800 space-y-3 text-[11px]">
                                 <div class="flex justify-between">
                                     <span class="text-slate-500">ZWC Removed:</span>
-                                    <span class="text-rose-400 font-mono font-bold" x-text="strip.removedCount + ' chars'"></span>
+                                    <span class="text-rose-400 font-mono font-bold" x-text="strip.removedCount + ' chars'">0 chars</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-slate-500">Status:</span>
-                                    <span class="font-mono font-bold" :class="strip.removedCount > 0 ? 'text-rose-400' : 'text-emerald-400'" x-text="strip.removedCount > 0 ? 'PURGED' : 'CLEAN'"></span>
+                                    <span class="font-mono font-bold" :class="strip.removedCount > 0 ? 'text-rose-400' : 'text-emerald-400'" x-text="strip.removedCount > 0 ? 'PURGED' : 'CLEAN'">CLEAN</span>
                                 </div>
                             </div>
                         </div>
@@ -199,186 +193,7 @@
         </div>
     </div>
 
-    <script>
-        const MARKERS = { 
-            B64: '\u2062', B32: '\u2061', B16: '\u2068', B8: '\u2067', B2: '\u2066', 
-            CMP: '\u200D', 
-            END: '\u2069' 
-        };
-
-        function stealthV8Full() {
-            return {
-                tab: 'encode', score: 0,
-                config: { mode: '64', compress: true, space: true, punc: true, homo: true, redundancy: false },
-                encode: { secret: '', cover: '', result: '' },
-                decode: { input: '', output: '' },
-                strip: { input: '', output: '', removedCount: 0 },
-                stats: { orig: 0, packed: 0, ratio: 0 },
-                platforms: [
-                    { name: 'Discord', safe: true },
-                    { name: 'Telegram', safe: true },
-                    { name: 'Messenger', safe: false },
-                    { name: 'Zalo', safe: true },
-                    { name: 'Twitter', safe: false }
-                ],
-
-                init() { this.checkPlatformCompatibility(); },
-
-                checkPlatformCompatibility() {
-                    const isClassic = this.config.mode === '2';
-                    this.platforms.forEach(p => {
-                        if (p.name === 'Messenger') p.safe = isClassic;
-                    });
-                },
-
-                executeEncode() {
-                    if (!this.encode.secret || !this.encode.cover) return alert("Missing Input!");
-                    
-                    let secretData = this.encode.secret;
-                    this.stats.orig = new TextEncoder().encode(secretData).length;
-
-                    let isCompressed = false;
-                    if (this.config.compress) {
-                        const compressed = LZString.compressToUTF16(secretData);
-                        if (compressed.length * 2 < this.stats.orig) {
-                            secretData = compressed;
-                            isCompressed = true;
-                        }
-                    }
-
-                    const bytes = new TextEncoder().encode(secretData);
-                    this.stats.packed = bytes.length;
-                    this.stats.ratio = Math.round((1 - (this.stats.packed / this.stats.orig)) * 100);
-
-                    let payload = "";
-                    const modeMarker = MARKERS['B' + this.config.mode] || MARKERS.B64;
-                    const compMarker = isCompressed ? MARKERS.CMP : "";
-
-                    if (this.config.mode === '2') {
-                        const bin = Array.from(bytes).map(b => b.toString(2).padStart(8, '0')).join('');
-                        for (let bit of bin) {
-                            payload += (bit === '0' ? '\u200B' : '\u200C');
-                        }
-                    } else {
-                        // Protocol v8.1 chuẩn dải Base-16 U+E0100 -> U+E010F
-                        bytes.forEach(b => {
-                            const highNibble = (b >> 4) & 0x0F;
-                            const lowNibble = b & 0x0F;
-                            payload += String.fromCodePoint(0xE0100 + highNibble);
-                            payload += String.fromCodePoint(0xE0100 + lowNibble);
-                        });
-                    }
-
-                    const fullPayload = modeMarker + compMarker + payload + (this.config.redundancy ? payload : "") + MARKERS.END;
-                    const pArr = Array.from(fullPayload);
-                    const cArr = Array.from(this.encode.cover);
-
-                    let res = "";
-                    let pIdx = 0;
-                    const step = Math.max(1, Math.floor(cArr.length / pArr.length));
-
-                    for (let i = 0; i < cArr.length; i++) {
-                        res += cArr[i];
-                        if (pIdx < pArr.length && (i % step === 0 || i === cArr.length - 1)) {
-                            res += pArr[pIdx++];
-                        }
-                    }
-
-                    while (pIdx < pArr.length) res += pArr[pIdx++];
-
-                    this.encode.result = res;
-                    this.calculateScore();
-                    this.copy(this.encode.result, true);
-                },
-
-                executeDecode() {
-                    if (!this.decode.input) return;
-                    const txt = this.decode.input;
-
-                    const raw = Array.from(txt).filter(c => {
-                        const cp = c.codePointAt(0);
-                        return (cp >= 0x200B && cp <= 0x2069) || (cp >= 0xE0100 && cp <= 0xE01EF);
-                    }).join('');
-
-                    const match = raw.match(/[\u2061\u2062\u2066\u2067\u2068](\u200D)?(.*?)[\u2069]/u);
-                    
-                    if (match) {
-                        const type = match[0][0];
-                        const isCompressed = match[1] === MARKERS.CMP;
-                        const content = match[2];
-                        let resBytes = [];
-
-                        if (type === MARKERS.B2) {
-                            const bits = Array.from(content).map(c => c === '\u200B' ? '0' : '1').join('');
-                            for (let i = 0; i < bits.length; i += 8) {
-                                const byteStr = bits.substr(i, 8);
-                                if (byteStr.length === 8) resBytes.push(parseInt(byteStr, 2));
-                            }
-                        } else {
-                            const chars = Array.from(content);
-                            const targetChars = (this.config.redundancy && chars.length % 2 === 0) 
-                                ? chars.slice(0, chars.length / 2) 
-                                : chars;
-
-                            for (let i = 0; i < targetChars.length; i += 2) {
-                                if (i + 1 < targetChars.length) {
-                                    const high = targetChars[i].codePointAt(0) - 0xE0100;
-                                    const low = targetChars[i+1].codePointAt(0) - 0xE0100;
-                                    resBytes.push((high << 4) | low);
-                                }
-                            }
-                        }
-
-                        try {
-                            let decodedText = new TextDecoder().decode(new Uint8Array(resBytes));
-                            if (isCompressed) {
-                                decodedText = LZString.decompressFromUTF16(decodedText) || "Error: Decompression failed.";
-                            }
-                            this.decode.output = decodedText;
-                        } catch (e) {
-                            this.decode.output = "Error: Corrupted Payload.";
-                        }
-                    } else { 
-                        this.decode.output = "Error: Payload Null or Signal Corrupted."; 
-                    }
-                },
-
-                executeStrip() {
-                    if (!this.strip.input) {
-                        this.strip.output = '';
-                        this.strip.removedCount = 0;
-                        return;
-                    }
-
-                    const origLen = Array.from(this.strip.input).length;
-                    let text = this.strip.input;
-
-                    text = text.replace(/[\u200B-\u200D\u2060-\u2069\uFEFF]/gu, '');
-                    text = text.replace(/[\u{E0100}-\u{E01EF}]/gu, '');
-
-                    const cleanLen = Array.from(text).length;
-
-                    this.strip.output = text;
-                    this.strip.removedCount = origLen - cleanLen;
-                },
-
-                calculateScore() {
-                    const secretLen = this.stats.packed || 1;
-                    const coverLen = this.encode.cover.length || 1;
-                    const ratio = coverLen / secretLen;
-                    this.score = Math.min(100, Math.floor(ratio * 12));
-                },
-                scoreColor() { return this.score > 70 ? 'text-green-500' : (this.score > 40 ? 'text-yellow-500' : 'text-red-500'); },
-                scoreBg() { return this.score > 70 ? 'bg-green-500' : (this.score > 40 ? 'bg-yellow-500' : 'bg-red-500'); },
-                copy(t, silent = false) { 
-                    if (t) { 
-                        navigator.clipboard.writeText(t); 
-                        if (!silent) alert("Copied!"); 
-                    } 
-                },
-                reset() { location.reload(); }
-            }
-        }
-    </script>
+    <!-- Custom Script -->
+    <script src="script.js"></script>
 </body>
 </html>
