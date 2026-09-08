@@ -43,6 +43,6 @@ When **HOMO** mode is enabled, standard Latin letters in the cover text are rand
 
 ```text
 ├── index.html              # Main UI Dashboard
-├── script.js                  # StealthV8 Alpine.js core logic
+├── script.js                  # ZWC Datahider Alpine.js core logic
 ├── Homoglyphs_Master.md    # Master reference for Unicode look-alikes
 └── README.md                  # Project documentation introduction etc
