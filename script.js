@@ -22,7 +22,8 @@ document.addEventListener('alpine:init', () => {
         },
         decode: {
             input: '',
-            output: ''
+            output: '',
+            cleanCover: ''
         },
         strip: {
             input: '',
@@ -40,15 +41,14 @@ document.addEventListener('alpine:init', () => {
         },
         platforms: [],
 
-        // Bảng ZWC để mã hóa bit
         zwcMap: {
-            '00': '\u200B', // Zero Width Space
-            '01': '\u200C', // Zero Width Non-Joiner
-            '10': '\u200D', // Zero Width Joiner
-            '11': '\uFEFF'  // Zero Width No-Break Space
+            '00': '\u200B',
+            '01': '\u200C',
+            '10': '\u200D',
+            '11': '\uFEFF'
         },
 
-        // Bảng Homoglyphs Look-Alikes từ Homoglyphs.md
+        // Bảng Homoglyphs Look-Alikes[cite: 5]
         homoglyphs: {
             'a': ['а'],
             'c': ['с'],
@@ -84,7 +84,7 @@ document.addEventListener('alpine:init', () => {
             }));
         },
 
-        // Áp dụng Homoglyphs lên Cover Text
+        // 1. Áp dụng Homoglyphs
         applyHomoglyphs(text) {
             return text.split('').map(char => {
                 const lower = char.toLowerCase();
@@ -97,7 +97,20 @@ document.addEventListener('alpine:init', () => {
             }).join('');
         },
 
-        // Mã hóa Text -> ZWC
+        // 2. HÀM MỚI: Khôi phục Homoglyphs về Latin chuẩn
+        revertHomoglyphs(text) {
+            let result = text;
+            Object.entries(this.homoglyphs).forEach(([latinChar, lookAlikes]) => {
+                lookAlikes.forEach(glyph => {
+                    // Thay thế phiên bản thường & hoa
+                    result = result.replaceAll(glyph, latinChar);
+                    result = result.replaceAll(glyph.toUpperCase(), latinChar.toUpperCase());
+                });
+            });
+            return result;
+        },
+
+        // Encode ZWC
         textToZwc(text) {
             const encoder = new TextEncoder();
             const bytes = encoder.encode(text);
@@ -115,7 +128,7 @@ document.addEventListener('alpine:init', () => {
             return zwcResult;
         },
 
-        // Giải mã ZWC -> Text
+        // Decode ZWC
         zwcToText(zwcStr) {
             const revMap = {
                 '\u200B': '00',
@@ -151,19 +164,16 @@ document.addEventListener('alpine:init', () => {
             const hiddenZwc = this.textToZwc(this.encode.secret);
             let cover = this.encode.cover || ' ';
 
-            // Xử lý Homoglyphs nếu checkbox được bật
             if (this.config.homo) {
                 cover = this.applyHomoglyphs(cover);
             }
 
-            // Chèn mã ZWC vào cover text
             if (cover.length > 1) {
                 this.encode.result = cover.slice(0, 1) + hiddenZwc + cover.slice(1);
             } else {
                 this.encode.result = cover + hiddenZwc;
             }
 
-            // Cập nhật System Audit
             const encoder = new TextEncoder();
             this.stats.orig = encoder.encode(this.encode.secret).length;
             this.stats.packed = encoder.encode(this.encode.result).length;
@@ -176,24 +186,25 @@ document.addEventListener('alpine:init', () => {
         executeDecode() {
             if (!this.decode.input) return;
 
-            // Tách ZWC
+            // Step 1: Lọc ZWC để giải mã tin nhắn bí mật
             const zwcOnly = this.decode.input.replace(/[^\u200B\u200C\u200D\uFEFF]/g, '');
-            const recovered = this.zwcToText(zwcOnly);
+            const recoveredSecret = this.zwcToText(zwcOnly);
 
-            this.decode.output = recovered || '❌ Không tìm thấy payload ẩn hợp lệ!';
+            // Step 2: Lọc bỏ ZWC khỏi Cover text + Revert toàn bộ Homoglyphs về Latin
+            const rawCover = this.decode.input.replace(/[\u200B-\u200D\uFEFF]/g, '');
+            this.decode.cleanCover = this.revertHomoglyphs(rawCover);
+
+            this.decode.output = recoveredSecret || '❌ Không tìm thấy payload ẩn hợp lệ!';
         },
 
         executeStrip() {
             const originalLength = this.strip.input.length;
+            
             // Xóa ZWC
             let cleaned = this.strip.input.replace(/[\u200B-\u200D\uFEFF]/g, '');
             
-            // Xóa/khôi phục Homoglyphs về dạng Latin thường nếu muốn dọn sạch hoàn toàn
-            Object.entries(this.homoglyphs).forEach(([latin, lookAlikes]) => {
-                lookAlikes.forEach(glyph => {
-                    cleaned = cleaned.replaceAll(glyph, latin);
-                });
-            });
+            // Khôi phục Homoglyphs về Latin chuẩn
+            cleaned = this.revertHomoglyphs(cleaned);
 
             this.strip.output = cleaned;
             this.strip.removedCount = originalLength - this.strip.output.length;
@@ -219,7 +230,7 @@ document.addEventListener('alpine:init', () => {
 
         reset() {
             this.encode = { secret: '', cover: '', result: '' };
-            this.decode = { input: '', output: '' };
+            this.decode = { input: '', output: '', cleanCover: '' };
             this.strip = { input: '', output: '', removedCount: 0 };
             this.score = 0;
             this.stats = { orig: 0, packed: 0, ratio: 0 };
